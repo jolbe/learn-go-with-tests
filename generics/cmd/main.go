@@ -6,8 +6,10 @@ import (
 	"github.com/gregor-pifko/learn-go-with-tests/generics"
 )
 
+var StackOfInts = new(generics.Stack[int])
+
 func main() {
-	stack := generics.StackOfInts{}
+	stack := StackOfInts
 	fmt.Println("is empty:", stack.IsEmpty())
 	stack.Push(42)
 	fmt.Println(stack, stack.IsEmpty())
@@ -21,6 +23,6 @@ func main() {
 	}
 
 	stack.Push(42)
-	stack.Push("string inside stack of ints")
+	// stack.Push("string inside stack of ints")
 	fmt.Println(stack)
 }
