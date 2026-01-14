@@ -3,6 +3,7 @@ package arrays
 import (
 	"reflect"
 	"slices"
+	"strings"
 	"testing"
 )
 
@@ -44,5 +45,46 @@ func TestSumAllTails(t *testing.T) {
 		got := SumAllTails([]int{}, []int{3, 4, 5})
 		want := []int{0, 9}
 		checkSums(t, got, want)
+	})
+}
+
+func TestReduce(t *testing.T) {
+	t.Run("multiplication of all elements", func(t *testing.T) {
+		multiply := func(acc, val int) int { return acc * val }
+		AssertEqual(t, Reduce([]int{1, 2, 3, 4, 5}, multiply, 1), 120)
+	})
+
+	t.Run("concatenate strings", func(t *testing.T) {
+		concat := func(acc, val string) string { return acc + val }
+		AssertEqual(t, Reduce([]string{"H", "e", "l", "l", "o"}, concat, ""), "Hello")
+	})
+}
+
+func TestFind(t *testing.T) {
+	t.Run("find first even number", func(t *testing.T) {
+		numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+		firstEvenNumber, found := Find(numbers, func(num int) bool { return num%2 == 0 })
+		AssertTrue(t, found)
+		AssertEqual(t, firstEvenNumber, 2)
+	})
+
+	type Person struct {
+		Name string
+	}
+
+	t.Run("find the best programer", func(t *testing.T) {
+		people := []Person{
+			{Name: "Kent Beck"},
+			{Name: "Martin Fowler"},
+			{Name: "Gregor Pifko"},
+		}
+
+		king, found := Find(people, func(p Person) bool {
+			return strings.Contains(p.Name, "Gregor")
+		})
+
+		AssertTrue(t, found)
+		AssertEqual(t, king.Name, "Gregor Pifko")
 	})
 }
