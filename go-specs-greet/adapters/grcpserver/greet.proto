@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package grcpserver.v1;
+
+option go_package = "github.com/gpifko/go-specs-greet/adapters/grcpserver";
+
+service Greeter {
+  rpc Greet (GreetRequest) returns (GreetReply) {}
+  rpc Curse (CurseRequest) returns (CurseReply) {}
+}
+
+message GreetRequest {
+  string name = 1;
+}
+
+message GreetReply {
+  string message = 1;
+}
+
+message CurseRequest {
+  string name = 1;
+}
+
+message CurseReply {
+  string message = 1;
+}

@@ -1,0 +1,16 @@
+# ABOUTME: Docker Compose config with watch mode for hot-reloading Go server
+# ABOUTME: Run with `docker compose watch` to auto-rebuild on file changes
+
+services:
+  httpserver:
+    build:
+      context: .
+      dockerfile: cmd/httpserver/Dockerfile
+    ports:
+      - "8080:8080"
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+          ignore:
+            - "**/*_test.go"
