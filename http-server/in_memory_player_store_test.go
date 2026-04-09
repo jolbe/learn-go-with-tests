@@ -19,6 +19,7 @@ func TestInMemoryPlayerStoreConcurrently(t *testing.T) {
 		store.RecordWin(player)
 
 		assertScore(t, store.GetPlayerScore(player), 3)
+		assertLeague(t, store.GetLeague(), []httpserver.Player{{"Pepper", 3}})
 	})
 
 	t.Run("it runs safely concurrently", func(t *testing.T) {
@@ -38,12 +39,27 @@ func TestInMemoryPlayerStoreConcurrently(t *testing.T) {
 		wg.Wait()
 
 		assertScore(t, store.GetPlayerScore(player), wantedWins)
+		assertLeague(t, store.GetLeague(), []httpserver.Player{{"Pepper", wantedWins}})
+	})
+
+	t.Run("it runs league safely during writes", func(t *testing.T) {
+		var (
+			store  = httpserver.NewInMemoryPlayerStore()
+			player = "Pepper"
+		)
+
+		var wg sync.WaitGroup
+
+		for range 1000 {
+			wg.Go(func() {
+				store.RecordWin(player)
+			})
+			wg.Go(func() {
+				store.GetLeague()
+			})
+		}
+		wg.Wait()
 	})
 }
 
-func assertScore(t testing.TB, got, want int) {
-	t.Helper()
-	if got != want {
-		t.Errorf("got %d; want %d", got, want)
-	}
-}
+

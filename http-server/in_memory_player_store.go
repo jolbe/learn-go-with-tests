@@ -1,6 +1,8 @@
 package httpserver
 
-import "sync"
+import (
+	"sync"
+)
 
 func NewInMemoryPlayerStore() *InMemoryPlayerStore {
 	return &InMemoryPlayerStore{store: make(map[string]int)}
@@ -21,4 +23,14 @@ func (i *InMemoryPlayerStore) RecordWin(name string) {
 	i.lock.Lock()
 	defer i.lock.Unlock()
 	i.store[name]++
+}
+
+func (i *InMemoryPlayerStore) GetLeague() []Player {
+	i.lock.RLock()
+	defer i.lock.RUnlock()
+	var league []Player
+	for name, wins := range i.store {
+		league = append(league, Player{name, wins})
+	}
+	return league
 }

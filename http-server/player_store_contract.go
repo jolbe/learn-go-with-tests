@@ -1,6 +1,7 @@
 package httpserver
 
 import (
+	"slices"
 	"testing"
 )
 
@@ -28,6 +29,7 @@ func (p PlayerStoreContract) Test(t *testing.T) {
 
 		assertPlayerScore(t, sut.GetPlayerScore(player1), 3)
 		assertPlayerScore(t, sut.GetPlayerScore(player2), 2)
+		assertLeague(t, sut.GetLeague(), []Player{{player1, 3}, {player2, 2}})
 	})
 }
 
@@ -35,5 +37,12 @@ func assertPlayerScore(t testing.TB, got, want int) {
 	t.Helper()
 	if got != want {
 		t.Fatalf("wrong score got %d; want %d", got, want)
+	}
+}
+
+func assertLeague(t testing.TB, got, want []Player) {
+	t.Helper()
+	if !slices.Equal(got, want) {
+		t.Errorf("returned league table doesn't match, got %v; want %v", got, want)
 	}
 }
