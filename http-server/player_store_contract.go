@@ -6,13 +6,13 @@ import (
 )
 
 type PlayerStoreContract struct {
-	NewStore func() PlayerStore
+	NewStore func(testing.TB) PlayerStore
 }
 
 func (p PlayerStoreContract) Test(t *testing.T) {
 	t.Run("records wins for Pepper and Floyd", func(t *testing.T) {
 		var (
-			sut     = p.NewStore()
+			sut     = p.NewStore(t)
 			player1 = "Pepper"
 			player2 = "Floyd"
 		)
@@ -29,7 +29,7 @@ func (p PlayerStoreContract) Test(t *testing.T) {
 
 		assertPlayerScore(t, sut.GetPlayerScore(player1), 3)
 		assertPlayerScore(t, sut.GetPlayerScore(player2), 2)
-		assertLeague(t, sut.GetLeague(), []Player{{player1, 3}, {player2, 2}})
+		assertLeague(t, sut.GetLeague(), League{{player1, 3}, {player2, 2}})
 	})
 }
 
@@ -40,7 +40,7 @@ func assertPlayerScore(t testing.TB, got, want int) {
 	}
 }
 
-func assertLeague(t testing.TB, got, want []Player) {
+func assertLeague(t testing.TB, got, want League) {
 	t.Helper()
 	if !slices.Equal(got, want) {
 		t.Errorf("returned league table doesn't match, got %v; want %v", got, want)

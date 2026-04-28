@@ -10,10 +10,13 @@ import (
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	var (
-		store  = httpserver.NewInMemoryPlayerStore()
-		server = httpserver.NewPlayerServer(store)
-		player = "Pepper"
+		// store  = httpserver.NewInMemoryPlayerStore() // in case you need to switch out the file database for the in-memory one
+		database   = createTempFile(t, "[]")
+		store, err = httpserver.NewFileSystemPlayerStore(database)
+		server     = httpserver.NewPlayerServer(store)
+		player     = "Pepper"
 	)
+	assertNoError(t, err)
 
 	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
 	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))

@@ -25,12 +25,12 @@ func (i *InMemoryPlayerStore) RecordWin(name string) {
 	i.store[name]++
 }
 
-func (i *InMemoryPlayerStore) GetLeague() []Player {
+func (i *InMemoryPlayerStore) GetLeague() League {
 	i.lock.RLock()
 	defer i.lock.RUnlock()
-	var league []Player
+	var league League
 	for name, wins := range i.store {
 		league = append(league, Player{name, wins})
 	}
-	return league
+	return league.Sort()
 }
