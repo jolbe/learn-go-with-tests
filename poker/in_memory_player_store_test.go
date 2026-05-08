@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/gregor-pifko/learn-go-with-tests/poker"
+	"github.com/gregor-pifko/learn-go-with-tests/poker/pokertest"
 )
 
 func TestInMemoryPlayerStoreConcurrently(t *testing.T) {
@@ -18,8 +19,8 @@ func TestInMemoryPlayerStoreConcurrently(t *testing.T) {
 		store.RecordWin(player)
 		store.RecordWin(player)
 
-		assertScore(t, store.GetPlayerScore(player), 3)
-		assertLeague(t, store.GetLeague(), []poker.Player{{"Pepper", 3}})
+		pokertest.AssertScore(t, store.GetPlayerScore(player), 3)
+		pokertest.AssertLeague(t, store.GetLeague(), poker.League{{"Pepper", 3}})
 	})
 
 	t.Run("it runs safely concurrently", func(t *testing.T) {
@@ -38,8 +39,8 @@ func TestInMemoryPlayerStoreConcurrently(t *testing.T) {
 		}
 		wg.Wait()
 
-		assertScore(t, store.GetPlayerScore(player), wantedWins)
-		assertLeague(t, store.GetLeague(), []poker.Player{{"Pepper", wantedWins}})
+		pokertest.AssertScore(t, store.GetPlayerScore(player), wantedWins)
+		pokertest.AssertLeague(t, store.GetLeague(), poker.League{{"Pepper", wantedWins}})
 	})
 
 	t.Run("it runs league safely during writes", func(t *testing.T) {

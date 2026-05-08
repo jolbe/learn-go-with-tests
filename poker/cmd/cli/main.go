@@ -1,8 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
-	"net/http"
+	"os"
 
 	"github.com/gregor-pifko/learn-go-with-tests/poker"
 )
@@ -16,7 +17,7 @@ func main() {
 	}
 	defer close()
 
-	server := poker.NewPlayerServer(store)
-
-	log.Fatalf("could not listen on port 8080 %v", http.ListenAndServe(":8080", server))
+	fmt.Println("Let's play poker")
+	fmt.Println("Type {Name} wins to record a win")
+	poker.NewCLI(store, os.Stdin).PlayPoker()
 }

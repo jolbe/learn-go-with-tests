@@ -14,15 +14,9 @@ type PlayerStore interface {
 	GetLeague() League
 }
 
-// Player stores a name with a number of wins
-type Player struct {
-	Name string
-	Wins int
-}
-
 // PlayerServer is a HTTP interface for player information
 type PlayerServer struct {
-	Store PlayerStore
+	store PlayerStore
 	http.Handler
 }
 
@@ -32,7 +26,7 @@ const jsonContentType = "application/json"
 func NewPlayerServer(store PlayerStore) *PlayerServer {
 	p := new(PlayerServer)
 
-	p.Store = store
+	p.store = store
 
 	router := http.NewServeMux()
 	router.HandleFunc("/league", p.leagueHandler)
@@ -45,7 +39,7 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", jsonContentType)
-	json.NewEncoder(w).Encode(p.Store.GetLeague())
+	json.NewEncoder(w).Encode(p.store.GetLeague())
 }
 
 func (p *PlayerServer) playersHandler(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +54,7 @@ func (p *PlayerServer) playersHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *PlayerServer) showScore(w http.ResponseWriter, player string) {
-	score := p.Store.GetPlayerScore(player)
+	score := p.store.GetPlayerScore(player)
 
 	if score == 0 {
 		w.WriteHeader(http.StatusNotFound)
@@ -70,6 +64,6 @@ func (p *PlayerServer) showScore(w http.ResponseWriter, player string) {
 }
 
 func (p *PlayerServer) processWin(w http.ResponseWriter, player string) {
-	p.Store.RecordWin(player)
+	p.store.RecordWin(player)
 	w.WriteHeader(http.StatusAccepted)
 }

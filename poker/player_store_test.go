@@ -4,19 +4,20 @@ import (
 	"testing"
 
 	"github.com/gregor-pifko/learn-go-with-tests/poker"
+	"github.com/gregor-pifko/learn-go-with-tests/poker/pokertest"
 )
 
 func TestInMemoryPlayerStore(t *testing.T) {
-	poker.PlayerStoreContract{NewStore: func(t testing.TB) poker.PlayerStore {
+	pokertest.PlayerStoreContract{NewStore: func(t testing.TB) poker.PlayerStore {
 		return poker.NewInMemoryPlayerStore()
 	}}.Test(t)
 }
 
 func TestFileSystemPlayerStore(t *testing.T) {
-	poker.PlayerStoreContract{NewStore: func(t testing.TB) poker.PlayerStore {
+	pokertest.PlayerStoreContract{NewStore: func(t testing.TB) poker.PlayerStore {
 		database := createTempFile(t, "[]")
 		store, err := poker.NewFileSystemPlayerStore(database)
-		assertNoError(t, err)
+		pokertest.AssertNoError(t, err)
 
 		return store
 	}}.Test(t)

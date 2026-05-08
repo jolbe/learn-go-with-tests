@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/gregor-pifko/learn-go-with-tests/poker"
+	"github.com/gregor-pifko/learn-go-with-tests/poker/pokertest"
 )
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
@@ -16,7 +17,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		server     = poker.NewPlayerServer(store)
 		player     = "Pepper"
 	)
-	assertNoError(t, err)
+	pokertest.AssertNoError(t, err)
 
 	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
 	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
@@ -25,20 +26,20 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	t.Run("get score", func(t *testing.T) {
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, newGetScoreRequest(player))
-		assertStatus(t, response.Code, http.StatusOK)
+		pokertest.AssertStatus(t, response.Code, http.StatusOK)
 
-		assertResponseBody(t, response.Body.String(), "3")
+		pokertest.AssertResponseBody(t, response.Body.String(), "3")
 	})
 
 	t.Run("get league", func(t *testing.T) {
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, newLeagueRequest())
-		assertStatus(t, response.Code, http.StatusOK)
+		pokertest.AssertStatus(t, response.Code, http.StatusOK)
 
 		got := getLeagueFromResponse(t, response.Body)
-		want := []poker.Player{
+		want := poker.League{
 			{"Pepper", 3},
 		}
-		assertLeague(t, got, want)
+		pokertest.AssertLeague(t, got, want)
 	})
 }

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/gregor-pifko/learn-go-with-tests/poker"
+	"github.com/gregor-pifko/learn-go-with-tests/poker/pokertest"
 )
 
 func TestFileSystemStore(t *testing.T) {
@@ -14,7 +15,7 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 
 		store, err := poker.NewFileSystemPlayerStore(database)
-		assertNoError(t, err)
+		pokertest.AssertNoError(t, err)
 
 		got := store.GetLeague()
 
@@ -23,11 +24,11 @@ func TestFileSystemStore(t *testing.T) {
 			{"Cleo", 10},
 		}
 
-		assertLeague(t, got, want)
+		pokertest.AssertLeague(t, got, want)
 
 		// read again
 		got = store.GetLeague()
-		assertLeague(t, got, want)
+		pokertest.AssertLeague(t, got, want)
 	})
 
 	t.Run("get player score", func(t *testing.T) {
@@ -36,10 +37,10 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 
 		store, err := poker.NewFileSystemPlayerStore(database)
-		assertNoError(t, err)
+		pokertest.AssertNoError(t, err)
 
 		got := store.GetPlayerScore("Chris")
-		assertScore(t, got, 33)
+		pokertest.AssertScore(t, got, 33)
 	})
 
 	t.Run("store wins for existing players", func(t *testing.T) {
@@ -48,12 +49,12 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 
 		store, err := poker.NewFileSystemPlayerStore(database)
-		assertNoError(t, err)
+		pokertest.AssertNoError(t, err)
 
 		store.RecordWin("Chris")
 
 		got := store.GetPlayerScore("Chris")
-		assertScore(t, got, 34)
+		pokertest.AssertScore(t, got, 34)
 	})
 
 	t.Run("store wins for new players", func(t *testing.T) {
@@ -62,12 +63,12 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 
 		store, err := poker.NewFileSystemPlayerStore(database)
-		assertNoError(t, err)
+		pokertest.AssertNoError(t, err)
 
 		store.RecordWin("Pepper")
 
 		got := store.GetPlayerScore("Pepper")
-		assertScore(t, got, 1)
+		pokertest.AssertScore(t, got, 1)
 	})
 
 	t.Run("works with an empty file", func(t *testing.T) {
@@ -75,7 +76,7 @@ func TestFileSystemStore(t *testing.T) {
 
 		_, err := poker.NewFileSystemPlayerStore(database)
 
-		assertNoError(t, err)
+		pokertest.AssertNoError(t, err)
 	})
 }
 
