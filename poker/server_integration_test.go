@@ -1,19 +1,19 @@
-package httpserver_test
+package poker_test
 
 import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	httpserver "github.com/gregor-pifko/learn-go-with-tests/http-server"
+	"github.com/gregor-pifko/learn-go-with-tests/poker"
 )
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	var (
-		// store  = httpserver.NewInMemoryPlayerStore() // in case you need to switch out the file database for the in-memory one
+		// store  = poker.NewInMemoryPlayerStore() // in case you need to switch out the file database for the in-memory one
 		database   = createTempFile(t, "[]")
-		store, err = httpserver.NewFileSystemPlayerStore(database)
-		server     = httpserver.NewPlayerServer(store)
+		store, err = poker.NewFileSystemPlayerStore(database)
+		server     = poker.NewPlayerServer(store)
 		player     = "Pepper"
 	)
 	assertNoError(t, err)
@@ -36,7 +36,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		assertStatus(t, response.Code, http.StatusOK)
 
 		got := getLeagueFromResponse(t, response.Body)
-		want := []httpserver.Player{
+		want := []poker.Player{
 			{"Pepper", 3},
 		}
 		assertLeague(t, got, want)

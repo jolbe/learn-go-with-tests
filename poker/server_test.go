@@ -1,17 +1,17 @@
-package httpserver_test
+package poker_test
 
 import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	httpserver "github.com/gregor-pifko/learn-go-with-tests/http-server"
+	"github.com/gregor-pifko/learn-go-with-tests/poker"
 )
 
 type StubPlayerStore struct {
 	scores   map[string]int
 	winCalls []string
-	league   httpserver.League
+	league   poker.League
 }
 
 func (s *StubPlayerStore) GetPlayerScore(name string) int {
@@ -23,7 +23,7 @@ func (s *StubPlayerStore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
 
-func (s *StubPlayerStore) GetLeague() httpserver.League {
+func (s *StubPlayerStore) GetLeague() poker.League {
 	return s.league
 }
 
@@ -34,7 +34,7 @@ func TestGETPlayers(t *testing.T) {
 			"Floyd":  40,
 		},
 	}
-	server := httpserver.NewPlayerServer(&store)
+	server := poker.NewPlayerServer(&store)
 
 	tests := []struct {
 		name               string
@@ -79,7 +79,7 @@ func TestStoreWins(t *testing.T) {
 	store := StubPlayerStore{
 		scores: map[string]int{},
 	}
-	server := httpserver.NewPlayerServer(&store)
+	server := poker.NewPlayerServer(&store)
 
 	t.Run("it records wins when POST", func(t *testing.T) {
 		player := "Pepper"
@@ -103,14 +103,14 @@ func TestStoreWins(t *testing.T) {
 
 func TestLeague(t *testing.T) {
 	t.Run("it returns the league table as JSON", func(t *testing.T) {
-		wantedLeague := []httpserver.Player{
+		wantedLeague := []poker.Player{
 			{"Cleo", 32},
 			{"Chris", 20},
 			{"Twest", 14},
 		}
 
 		store := StubPlayerStore{league: wantedLeague}
-		server := httpserver.NewPlayerServer(&store)
+		server := poker.NewPlayerServer(&store)
 
 		request := newLeagueRequest()
 		response := httptest.NewRecorder()

@@ -1,16 +1,16 @@
-package httpserver_test
+package poker_test
 
 import (
 	"io"
 	"testing"
 
-	httpserver "github.com/gregor-pifko/learn-go-with-tests/http-server"
+	"github.com/gregor-pifko/learn-go-with-tests/poker"
 )
 
 func TestTape_Write(t *testing.T) {
 	file := createTempFile(t, "12345")
 
-	tape := httpserver.Tape{file}
+	tape := poker.Tape{file}
 
 	tape.Write([]byte("abc"))
 

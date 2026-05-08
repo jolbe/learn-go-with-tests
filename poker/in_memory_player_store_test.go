@@ -1,16 +1,16 @@
-package httpserver_test
+package poker_test
 
 import (
 	"sync"
 	"testing"
 
-	httpserver "github.com/gregor-pifko/learn-go-with-tests/http-server"
+	"github.com/gregor-pifko/learn-go-with-tests/poker"
 )
 
 func TestInMemoryPlayerStoreConcurrently(t *testing.T) {
 	t.Run("recording a win 3 times leaves it at 3", func(t *testing.T) {
 		var (
-			store  = httpserver.NewInMemoryPlayerStore()
+			store  = poker.NewInMemoryPlayerStore()
 			player = "Pepper"
 		)
 
@@ -19,13 +19,13 @@ func TestInMemoryPlayerStoreConcurrently(t *testing.T) {
 		store.RecordWin(player)
 
 		assertScore(t, store.GetPlayerScore(player), 3)
-		assertLeague(t, store.GetLeague(), []httpserver.Player{{"Pepper", 3}})
+		assertLeague(t, store.GetLeague(), []poker.Player{{"Pepper", 3}})
 	})
 
 	t.Run("it runs safely concurrently", func(t *testing.T) {
 		var (
 			wantedWins = 1000
-			store      = httpserver.NewInMemoryPlayerStore()
+			store      = poker.NewInMemoryPlayerStore()
 			player     = "Pepper"
 		)
 
@@ -39,12 +39,12 @@ func TestInMemoryPlayerStoreConcurrently(t *testing.T) {
 		wg.Wait()
 
 		assertScore(t, store.GetPlayerScore(player), wantedWins)
-		assertLeague(t, store.GetLeague(), []httpserver.Player{{"Pepper", wantedWins}})
+		assertLeague(t, store.GetLeague(), []poker.Player{{"Pepper", wantedWins}})
 	})
 
 	t.Run("it runs league safely during writes", func(t *testing.T) {
 		var (
-			store  = httpserver.NewInMemoryPlayerStore()
+			store  = poker.NewInMemoryPlayerStore()
 			player = "Pepper"
 		)
 
@@ -61,5 +61,3 @@ func TestInMemoryPlayerStoreConcurrently(t *testing.T) {
 		wg.Wait()
 	})
 }
-
-

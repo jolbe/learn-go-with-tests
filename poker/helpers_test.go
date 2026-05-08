@@ -1,4 +1,4 @@
-package httpserver_test
+package poker_test
 
 import (
 	"bytes"
@@ -7,14 +7,14 @@ import (
 	"strings"
 	"testing"
 
-	httpserver "github.com/gregor-pifko/learn-go-with-tests/http-server"
+	"github.com/gregor-pifko/learn-go-with-tests/poker"
 )
 
-func getLeagueFromResponse(t testing.TB, buf *bytes.Buffer) []httpserver.Player {
+func getLeagueFromResponse(t testing.TB, buf *bytes.Buffer) []poker.Player {
 	t.Helper()
 
 	body := buf.String()
-	league, err := httpserver.NewLeague(strings.NewReader(body))
+	league, err := poker.NewLeague(strings.NewReader(body))
 	if err != nil {
 		t.Fatalf("Unable to parse response from server %q into slice of Player, '%v'", body, err)
 	}
@@ -43,7 +43,7 @@ func assertResponseBody(t testing.TB, got, want string) {
 	}
 }
 
-func assertLeague(t testing.TB, got, want []httpserver.Player) {
+func assertLeague(t testing.TB, got, want []poker.Player) {
 	t.Helper()
 	if !slices.Equal(got, want) {
 		t.Errorf("returned league table doesn't match, got %v; want %v", got, want)
