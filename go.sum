@@ -1,5 +1,7 @@
 github.com/approvals/go-approval-tests v1.6.2 h1:LoTraXaHEK/w4i+jzqzUSwF6VwOAKmp7hxM4UqAwfng=
 github.com/approvals/go-approval-tests v1.6.2/go.mod h1:i7AlHlLqLyxTby+MnSFgxkObjFlsywI46fnOitjMBiU=
+github.com/gorilla/websocket v1.5.3 h1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=
+github.com/gorilla/websocket v1.5.3/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/quii/go-graceful-shutdown v0.6.0 h1:IIg2CnIdQWk/0yN+MOXdD5BJfa2CadfI50G7k+MopuU=
 github.com/quii/go-graceful-shutdown v0.6.0/go.mod h1:ovmTZZhfF99Z1JEmQjMzf+YelQDbUQ0L/E/fc5KFdiM=
 github.com/yuin/goldmark v1.7.16 h1:n+CJdUxaFMiDUNnWC3dMWCIQJSkxH4uz3ZwQBkAlVNE=

@@ -14,7 +14,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		// store  = poker.NewInMemoryPlayerStore() // in case you need to switch out the file database for the in-memory one
 		database   = createTempFile(t, "[]")
 		store, err = poker.NewFileSystemPlayerStore(database)
-		server     = poker.NewPlayerServer(store)
+		server     = mustMakePlayerServer(t, store, dummyGame)
 		player     = "Pepper"
 	)
 	pokertest.AssertNoError(t, err)
@@ -26,7 +26,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	t.Run("get score", func(t *testing.T) {
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, newGetScoreRequest(player))
-		pokertest.AssertStatus(t, response.Code, http.StatusOK)
+		pokertest.AssertStatus(t, response, http.StatusOK)
 
 		pokertest.AssertResponseBody(t, response.Body.String(), "3")
 	})
@@ -34,7 +34,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	t.Run("get league", func(t *testing.T) {
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, newLeagueRequest())
-		pokertest.AssertStatus(t, response.Code, http.StatusOK)
+		pokertest.AssertStatus(t, response, http.StatusOK)
 
 		got := getLeagueFromResponse(t, response.Body)
 		want := poker.League{
